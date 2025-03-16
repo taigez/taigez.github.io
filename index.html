@@ -1,7 +1,769 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Gacha Profile</title>
+    <style>
+        :root {
+            --primary: #ff5a5f;
+            --secondary: #3fb8af;
+            --accent: #ffc857;
+            --dark: #2e282a;
+            --light: #f7f7f7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: var(--dark);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .machine-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            margin: 0 auto 4rem;
+            perspective: 1200px;
+        }
+
+        .gacha-machine {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(10deg);
+        }
+
+        .machine-top {
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            left: 40px;
+            top: 0;
+            background: var(--primary);
+            border-radius: 50% 50% 0 0;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .glass-dome {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            left: 10px;
+            top: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50% 50% 0 0;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .dome-reflection {
+            position: absolute;
+            width: 100px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            top: 30px;
+            left: 30px;
+            transform: rotate(-30deg);
+        }
+
+        .machine-body {
+            position: absolute;
+            width: 240px;
+            height: 200px;
+            left: 30px;
+            top: 110px;
+            background: linear-gradient(to right, #ff7e84, var(--primary), #ff7e84);
+            border-radius: 20px;
+            z-index: 5;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .machine-base {
+            position: absolute;
+            width: 280px;
+            height: 40px;
+            left: 10px;
+            top: 310px;
+            background: var(--dark);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .knob-container {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            right: -10px;
+            top: 170px;
+            z-index: 20;
+        }
+
+        .knob {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+
+        .knob::after {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 30px;
+            background: var(--dark);
+            top: 15px;
+            left: 25px;
+            border-radius: 5px;
+        }
+
+        .knob:hover {
+            transform: scale(1.05);
+        }
+
+        .slot {
+            position: absolute;
+            width: 100px;
+            height: 40px;
+            background: #333;
+            bottom: 0;
+            left: 100px;
+            border-radius: 0 0 10px 10px;
+            overflow: hidden;
+        }
+
+        .tray {
+            position: absolute;
+            width: 140px;
+            height: 30px;
+            background: linear-gradient(to bottom, #666, #333);
+            bottom: -5px;
+            left: 80px;
+            border-radius: 5px 5px 20px 20px;
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .capsules-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .capsule {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            perspective: 1200px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .capsule:hover {
+            transform: translateY(-10px);
+        }
+
+        .capsule-half {
+            position: absolute;
+            width: 100%;
+            height: 60px;
+            border-radius: 60px 60px 0 0;
+            background: var(--secondary);
+            top: 0;
+            left: 0;
+            backface-visibility: hidden;
+            transition: transform 0.6s;
+            transform-origin: bottom center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .capsule-half.bottom {
+            top: 60px;
+            border-radius: 0 0 60px 60px;
+            transform-origin: top center;
+            background: var(--secondary);
+        }
+
+        .capsule.open .capsule-half.top {
+            transform: rotateX(-180deg);
+        }
+
+        .capsule.open .capsule-half.bottom {
+            transform: rotateX(180deg);
+        }
+
+        .capsule-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .capsule.open .capsule-content {
+            opacity: 1;
+            z-index: 5;
+            pointer-events: auto;
+        }
+
+        .capsule-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .capsule-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--secondary);
+        }
+
+        .capsule-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .capsule-inner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+        }
+
+        .prize-ball {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--light), #ddd);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .prize-ball svg {
+            width: 40px;
+            height: 40px;
+            fill: var(--secondary);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--light);
+            width: 90%;
+            max-width: 600px;
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .link-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            margin: 5px;
+            transition: background 0.3s, transform 0.3s;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .link-btn:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .skill-tag {
+            background: var(--secondary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 14px;
+        }
+
+        .project-card {
+            background: #f0f0f0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .project-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        /* Balls inside the machine's dome */
+        .ball {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            z-index: 8;
+        }
+
+        .ball-1 {
+            background: #ff7e84;
+            top: 50px;
+            left: 40px;
+        }
+
+        .ball-2 {
+            background: var(--secondary);
+            top: 70px;
+            left: 120px;
+        }
+
+        .ball-3 {
+            background: var(--accent);
+            top: 100px;
+            left: 70px;
+        }
+
+        /* Animation for capsule drop */
+        @keyframes drop {
+            0% {
+                transform: translateY(-300px) rotate(0deg);
+            }
+            70% {
+                transform: translateY(10px) rotate(360deg);
+            }
+            85% {
+                transform: translateY(-10px) rotate(370deg);
+            }
+            100% {
+                transform: translateY(0) rotate(360deg);
+            }
+        }
+
+        .dropping {
+            animation: drop 1s forwards;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .machine-container {
+                transform: scale(0.8);
+                margin-bottom: 0;
+            }
+            
+            .capsule {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .capsule-half {
+                height: 50px;
+            }
+            
+            .capsule-half.bottom {
+                top: 50px;
+            }
+        }
+    </style>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+    <header>
+        <h1>Hello, I'm Taige</h1>
+        <p>Turn the knob to get a capsule and discover more about me!</p>
+    </header>
+
+    <div class="machine-container">
+        <div class="gacha-machine">
+            <div class="machine-top">
+                <div class="glass-dome">
+                    <div class="dome-reflection"></div>
+                    <div class="ball ball-1"></div>
+                    <div class="ball ball-2"></div>
+                    <div class="ball ball-3"></div>
+                </div>
+            </div>
+            <div class="machine-body"></div>
+            <div class="knob-container">
+                <div class="knob" id="knob"></div>
+            </div>
+            <div class="slot"></div>
+            <div class="tray" id="tray"></div>
+            <div class="machine-base"></div>
+        </div>
+    </div>
+
+    <div class="capsules-container" id="capsules-container">
+        <!-- Capsules will be added here by JavaScript -->
+    </div>
+
+    <!-- LinkedIn Modal -->
+    <div class="modal" id="linkedin-modal">
+        <div class="modal-content">
+            <div class="close-btn">&times;</div>
+            <h2 class="modal-title">Professional Experience</h2>
+            <div class="modal-body">
+                <p>I'm a Graduate Student with experience in Computer Science and Software Engineering. </p>
+                <p>Currently pursing a career in Game Development and making my own indie game.</p>
+            </div>
+            <a href="https://www.linkedin.com/in/taigez/" target="_blank" class="link-btn">View LinkedIn Profile</a>
+        </div>
+    </div>
+
+    <!-- GitHub Modal -->
+    <div class="modal" id="github-modal">
+        <div class="modal-content">
+            <div class="close-btn">&times;</div>
+            <h2 class="modal-title">GitHub & Code</h2>
+            <div class="modal-body">
+                <p>Check out my code repositories and open source contributions. I'm passionate about Godot and interesting Godot plugins.</p>
+            </div>
+            <a href="https://github.com/taigez" target="_blank" class="link-btn">Visit My GitHub</a>
+        </div>
+    </div>
+
+    <!-- Twitter Modal -->
+    <div class="modal" id="twitter-modal">
+        <div class="modal-content">
+            <div class="close-btn">&times;</div>
+            <h2 class="modal-title">Connect on Twitter</h2>
+            <div class="modal-body">
+                <p>Follow me on Twitter where I share thoughts about my game dev journey, retweet interesting content about Indie Development, and connect with the community.</p>
+            </div>
+            <a href="https://x.com/its_taegi" target="_blank" class="link-btn">Follow Me @yourusername</a>
+        </div>
+    </div>
+
+    <!-- Skills Modal -->
+    <div class="modal" id="skills-modal">
+        <div class="modal-content">
+            <div class="close-btn">&times;</div>
+            <h2 class="modal-title">Skills & Expertise</h2>
+            <div class="modal-body">
+                <p>Here are some of the technologies and tools I work with:</p>
+                <div class="skills-list">
+                    <div class="skill-tag">Aseprite</div>
+                    <div class="skill-tag">Godot</div>
+                    <div class="skill-tag">Unity</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Modal -->
+    <div class="modal" id="projects-modal">
+        <div class="modal-content">
+            <div class="close-btn">&times;</div>
+            <h2 class="modal-title">Featured Projects</h2>
+            <div class="modal-body">
+                <div class="project-card">
+                    <h3>Project All Blue</h3>
+                    <p>A dynamic restaurant management simulation game built with Godot, featuring NPC behaviors, day-night cycles, and building mechanics.</p>
+                    <a href="#" target="_blank" class="link-btn">View Project (To be released)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div class="modal" id="contact-modal">
+        <div class="modal-content">
+            <div class="close-btn">&times;</div>
+            <h2 class="modal-title">Get In Touch</h2>
+            <div class="modal-body">
+                <p>I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.</p>
+                <p>Email me at: <a href="mailto:taigezhang@hotmail.com">taigezhang@homtail.com</a></p>
+            </div>
+            <a href="mailto:taigezhang@hotmail.com" class="link-btn">Email Me</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const knob = document.getElementById('knob');
+            const tray = document.getElementById('tray');
+            const capsulesContainer = document.getElementById('capsules-container');
+            const closeBtns = document.querySelectorAll('.close-btn');
+            
+            // Define capsule data
+            const capsuleData = [
+                {
+                    id: 'linkedin',
+                    label: 'LinkedIn',
+                    color: '#0077B5',
+                    icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>'
+                },
+                {
+                    id: 'github',
+                    label: 'GitHub',
+                    color: '#333',
+                    icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>'
+                },
+                {
+                    id: 'twitter',
+                    label: 'Twitter',
+                    color: '#1DA1F2',
+                    icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>'
+                },
+                {
+                    id: 'skills',
+                    label: 'Skills',
+                    color: '#E34F26',
+                    icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.745 6.737c-.673 0-1.254.313-1.74.838-.486.527-.729 1.163-.729 1.906 0 .742.242 1.377.728 1.902.486.526 1.067.839 1.74.839.674 0 1.255-.312 1.74-.835.486-.526.729-1.162.729-1.906 0-.745-.242-1.38-.728-1.907-.486-.525-1.067-.837-1.74-.837zm5.713 19.082l-1.624-18H21.42l-1.623 18h-6.34zm-7.805-5.32L4.32 18.257c-.858.001-1.575-.262-2.149-.786-.576-.527-.946-1.222-1.106-2.083-.161-.862-.089-1.663.217-2.403.307-.742.867-1.324 1.68-1.747l1.624-2.249c.536-.744 1.195-1.27 1.977-1.577.784-.308 1.599-.369 2.444-.186.847.186 1.55.607 2.11 1.267.561.659.869 1.464.923 2.42h-2.028c-.055-.594-.256-1.059-.605-1.395-.348-.337-.79-.542-1.326-.619-.536-.075-1.045-.016-1.526.178-.482.194-.883.503-1.204.93l-1.862 2.57c-.321.446-.512.94-.57 1.481-.055.542.03 1.042.258 1.503.227.458.559.824.996 1.098.437.274.949.41 1.535.41h2.999l.407-1.43h-2.433zm10.768-12.665h-4.816l-.434 1.525h3.045l-1.026 11.424h1.651l1.028-11.424h3.044l.433-1.525h-2.925z"/></svg>'
+                },
+                {
+                    id: 'projects',
+                    label: 'Projects',
+                    color: '#F7DF1E',
+                    icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.196-.127-.196l-1.825 1.125c.305.63.75 1.172 1.324 1.517.855.51 2.004.675 3.207.405.783-.226 1.458-.691 1.811-1.411.51-.93.402-2.07.397-3.346.012-2.054 0-4.109 0-6.179l.004-.056z"/></svg>'
+                },
+                {
+                    id: 'contact',
+                    label: 'Contact',
+                    color: '#6441A5',
+                    icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M.102 5.835l10.99 13.018c.625.74 1.475 1.16 2.39 1.16.915 0 1.766-.42 2.39-1.16l10.996-13.018c.514-.608.687-1.412.463-2.161-.224-.748-.797-1.31-1.533-1.5L4.154.326c-.255-.066-.517-.1-.776-.1-1.5 0-2.816 1.11-3.022 2.653-.114.855.116 1.708.643 2.397l-.897.56zM24 8.58c0 8.383-9.14 10.398-10.802 15.6h-2.397C9.14 18.978 0 16.963 0 8.58V7.153l9.613 11.347c.87 1.031 2.062 1.608 3.386 1.608 1.324 0 2.515-.577 3.386-1.608L24 7.783V8.58z"/></svg>'
+                }
+            ];
+            
+            // Generate and append capsules based on data
+            function generateCapsules() {
+                capsuleData.forEach(data => {
+                    const capsule = document.createElement('div');
+                    capsule.classList.add('capsule');
+                    capsule.dataset.id = data.id;
+                    
+                    capsule.innerHTML = `
+                        <div class="capsule-inner">
+                            <div class="capsule-half top" style="background: ${data.color}"></div>
+                            <div class="capsule-half bottom" style="background: ${data.color}"></div>
+                            <div class="capsule-content">
+                                <div class="prize-ball">
+                                    ${data.icon}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="capsule-label">${data.label}</div>
+                    `;
+                    
+                    capsulesContainer.appendChild(capsule);
+                });
+            }
+            
+            // Initialize the capsules
+            generateCapsules();
+            
+            // Hide all capsules initially
+            document.querySelectorAll('.capsule').forEach(capsule => {
+                capsule.style.display = 'none';
+            });
+            
+            // Turn knob to dispense a capsule
+            let currentCapsuleIndex = 0;
+            
+            knob.addEventListener('click', function() {
+                // Rotate the knob animation
+                this.style.transform = 'rotate(360deg)';
+                
+                // Get a random capsule if all have been shown, otherwise show the next one
+                let capsuleToShow;
+                
+                if (currentCapsuleIndex < capsuleData.length) {
+                    capsuleToShow = document.querySelector(`.capsule[data-id="${capsuleData[currentCapsuleIndex].id}"]`);
+                    currentCapsuleIndex++;
+                } else {
+                    // All capsules shown, pick a random one
+                    const randomIndex = Math.floor(Math.random() * capsuleData.length);
+                    capsuleToShow = document.querySelector(`.capsule[data-id="${capsuleData[randomIndex].id}"]`);
+                }
+                
+                // Make the capsule visible and animate it
+                capsuleToShow.style.display = 'block';
+                capsuleToShow.classList.add('dropping');
+                
+                // Reset knob after animation
+                setTimeout(() => {
+                    this.style.transform = 'rotate(0deg)';
+                }, 500);
+                
+                // Remove animation class after it completes
+                setTimeout(() => {
+                    capsuleToShow.classList.remove('dropping');
+                }, 1000);
+            });
+            
+            // Open/close capsules and modals
+            document.addEventListener('click', function(e) {
+                // Find the closest capsule parent if it exists
+                const capsule = e.target.closest('.capsule');
+                
+                if (capsule) {
+                    capsule.classList.toggle('open');
+                    
+                    // If capsule is open, show the modal after a short delay
+                    if (capsule.classList.contains('open')) {
+                        const modalId = capsule.dataset.id;
+                        const modal = document.getElementById(`${modalId}-modal`);
+                        
+                        setTimeout(() => {
+                            modal.classList.add('active');
+                        }, 1000);
+                    }
+                }
+                
+                // Close modal when close button is clicked
+                if (e.target.closest('.close-btn')) {
+                    const modal = e.target.closest('.modal');
+                    modal.classList.remove('active');
+                    
+                    // Find and close the associated capsule
+                    const modalId = modal.id.replace('-modal', '');
+                    const openCapsule = document.querySelector(`.capsule[data-id="${modalId}"].open`);
+                    
+                    if (openCapsule) {
+                        openCapsule.classList.remove('open');
+                    }
+                }
+            });
+            
+            // Close modal when clicking on the background
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.remove('active');
+                        
+                        // Find and close the associated capsule
+                        const modalId = this.id.replace('-modal', '');
+                        const openCapsule = document.querySelector(`.capsule[data-id="${modalId}"].open`);
+                        
+                        if (openCapsule) {
+                            openCapsule.classList.remove('open');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

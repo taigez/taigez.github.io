@@ -10,7 +10,7 @@
             --secondary: #3fb8af;
             --accent: #ffc857;
             --dark: #2e282a;
-            --light: #f7f7f7;
+            --light: #f8f6e1; /* Light khaki color instead of white */
         }
 
         * {
@@ -209,25 +209,28 @@
             transform: translateY(-10px);
         }
 
+        /* Modified capsule styling to match realistic gacha capsules */
         .capsule-half {
             position: absolute;
             width: 100%;
             height: 60px;
             border-radius: 60px 60px 0 0;
-            background: var(--secondary);
+            background: rgba(240, 230, 140, 0.7); /* Translucent khaki for top half */
             top: 0;
             left: 0;
             backface-visibility: hidden;
             transition: transform 0.6s;
             transform-origin: bottom center;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 5;
         }
 
         .capsule-half.bottom {
             top: 60px;
             border-radius: 0 0 60px 60px;
             transform-origin: top center;
-            background: var(--secondary);
+            background: var(--secondary); /* Colored bottom half */
+            z-index: 4;
         }
 
         .capsule.open .capsule-half.top {
@@ -238,6 +241,7 @@
             transform: rotateX(180deg);
         }
 
+        /* Icon placement inside the capsule, visible through top */
         .capsule-content {
             position: absolute;
             top: 0;
@@ -247,15 +251,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-
-        .capsule.open .capsule-content {
-            opacity: 1;
-            z-index: 5;
-            pointer-events: auto;
+            z-index: 3; /* Under the half shells */
         }
 
         .capsule-icon {
@@ -266,7 +262,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .capsule-icon svg {
@@ -298,18 +293,18 @@
         .prize-ball {
             width: 70px;
             height: 70px;
-            background: linear-gradient(135deg, var(--light), #ddd);
             border-radius: 50%;
+            background: #f0e68c; /* Khaki background for prize ball */
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 2;
         }
 
         .prize-ball svg {
             width: 40px;
             height: 40px;
-            fill: var(--secondary);
+            z-index: 3;
         }
 
         .modal {
@@ -342,6 +337,9 @@
             position: relative;
             transform: scale(0.8);
             transition: transform 0.3s;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .modal.active .modal-content {
@@ -408,16 +406,40 @@
             font-size: 14px;
         }
 
+        /* Enhanced project card for displaying images and GIFs */
         .project-card {
-            background: #f0f0f0;
+            background: #f5f2d0; /* Lighter khaki for project cards */
             border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .project-card h3 {
             color: var(--primary);
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .project-media {
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .project-media img, 
+        .project-media video {
+            width: 100%;
+            display: block;
+            border-radius: 8px;
+            max-height: 350px;
+            object-fit: cover;
+        }
+
+        .project-description {
+            margin-bottom: 15px;
+            line-height: 1.6;
         }
 
         /* Balls inside the machine's dome */
@@ -486,6 +508,14 @@
             .capsule-half.bottom {
                 top: 50px;
             }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .project-media {
+                max-height: 250px;
+            }
         }
     </style>
 </head>
@@ -552,7 +582,7 @@
             <div class="modal-body">
                 <p>Follow me on Twitter where I share thoughts about my game dev journey, retweet interesting content about Indie Development, and connect with the community.</p>
             </div>
-            <a href="https://x.com/its_taegi" target="_blank" class="link-btn">Follow Me @yourusername</a>
+            <a href="https://x.com/its_taegi" target="_blank" class="link-btn">Follow Me @its_taegi</a>
         </div>
     </div>
 
@@ -572,7 +602,7 @@
         </div>
     </div>
 
-    <!-- Projects Modal -->
+    <!-- Projects Modal - Enhanced for media -->
     <div class="modal" id="projects-modal">
         <div class="modal-content">
             <div class="close-btn">&times;</div>
@@ -580,9 +610,17 @@
             <div class="modal-body">
                 <div class="project-card">
                     <h3>Project All Blue</h3>
-                    <p>A dynamic restaurant management simulation game built with Godot, featuring NPC behaviors, day-night cycles, and building mechanics.</p>
+                    <div class="project-media">
+                        <!-- Replace with your actual image/GIF -->
+                        <img src="ab_1.gif" alt="Project All Blue preview">
+                        <br>
+                        <img src="ab_2.gif" alt="Project All Blue preview">
+                    </div>
+                    <p class="project-description">A dynamic restaurant management simulation game built with Godot, featuring NPC behaviors, day-night cycles, and building mechanics.</p>
+                    <p class="project-description">Players can design their restaurant layout, hire staff, create menus, and manage daily operations while responding to various challenges.</p>
                     <a href="#" target="_blank" class="link-btn">View Project (To be released)</a>
                 </div>
+        
             </div>
         </div>
     </div>
@@ -594,7 +632,7 @@
             <h2 class="modal-title">Get In Touch</h2>
             <div class="modal-body">
                 <p>I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.</p>
-                <p>Email me at: <a href="mailto:taigezhang@hotmail.com">taigezhang@homtail.com</a></p>
+                <p>Email me at: <a href="mailto:taigezhang@hotmail.com">taigezhang@hotmail.com</a></p>
             </div>
             <a href="mailto:taigezhang@hotmail.com" class="link-btn">Email Me</a>
         </div>
@@ -609,6 +647,12 @@
             
             // Define capsule data
             const capsuleData = [
+                {
+                    id: 'projects', // Projects first
+                    label: 'Projects',
+                    color: '#F7DF1E',
+                    icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.196-.127-.196l-1.825 1.125c.305.63.75 1.172 1.324 1.517.855.51 2.004.675 3.207.405.783-.226 1.458-.691 1.811-1.411.51-.93.402-2.07.397-3.346.012-2.054 0-4.109 0-6.179l.004-.056z"/></svg>'
+                },
                 {
                     id: 'linkedin',
                     label: 'LinkedIn',
@@ -634,12 +678,6 @@
                     icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.745 6.737c-.673 0-1.254.313-1.74.838-.486.527-.729 1.163-.729 1.906 0 .742.242 1.377.728 1.902.486.526 1.067.839 1.74.839.674 0 1.255-.312 1.74-.835.486-.526.729-1.162.729-1.906 0-.745-.242-1.38-.728-1.907-.486-.525-1.067-.837-1.74-.837zm5.713 19.082l-1.624-18H21.42l-1.623 18h-6.34zm-7.805-5.32L4.32 18.257c-.858.001-1.575-.262-2.149-.786-.576-.527-.946-1.222-1.106-2.083-.161-.862-.089-1.663.217-2.403.307-.742.867-1.324 1.68-1.747l1.624-2.249c.536-.744 1.195-1.27 1.977-1.577.784-.308 1.599-.369 2.444-.186.847.186 1.55.607 2.11 1.267.561.659.869 1.464.923 2.42h-2.028c-.055-.594-.256-1.059-.605-1.395-.348-.337-.79-.542-1.326-.619-.536-.075-1.045-.016-1.526.178-.482.194-.883.503-1.204.93l-1.862 2.57c-.321.446-.512.94-.57 1.481-.055.542.03 1.042.258 1.503.227.458.559.824.996 1.098.437.274.949.41 1.535.41h2.999l.407-1.43h-2.433zm10.768-12.665h-4.816l-.434 1.525h3.045l-1.026 11.424h1.651l1.028-11.424h3.044l.433-1.525h-2.925z"/></svg>'
                 },
                 {
-                    id: 'projects',
-                    label: 'Projects',
-                    color: '#F7DF1E',
-                    icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.196-.127-.196l-1.825 1.125c.305.63.75 1.172 1.324 1.517.855.51 2.004.675 3.207.405.783-.226 1.458-.691 1.811-1.411.51-.93.402-2.07.397-3.346.012-2.054 0-4.109 0-6.179l.004-.056z"/></svg>'
-                },
-                {
                     id: 'contact',
                     label: 'Contact',
                     color: '#6441A5',
@@ -656,10 +694,10 @@
                     
                     capsule.innerHTML = `
                         <div class="capsule-inner">
-                            <div class="capsule-half top" style="background: ${data.color}"></div>
+                            <div class="capsule-half top"></div>
                             <div class="capsule-half bottom" style="background: ${data.color}"></div>
                             <div class="capsule-content">
-                                <div class="prize-ball">
+                                <div class="prize-ball" style="fill: ${data.color}">
                                     ${data.icon}
                                 </div>
                             </div>
@@ -679,23 +717,33 @@
                 capsule.style.display = 'none';
             });
             
-            // Turn knob to dispense a capsule
-            let currentCapsuleIndex = 0;
+            // Modified to ensure projects is first
+            let isFirstCapsule = true;
+            let remainingCapsules = [...capsuleData.slice(1)]; // All except projects
             
             knob.addEventListener('click', function() {
                 // Rotate the knob animation
                 this.style.transform = 'rotate(360deg)';
                 
-                // Get a random capsule if all have been shown, otherwise show the next one
+                // Get capsule to show
                 let capsuleToShow;
                 
-                if (currentCapsuleIndex < capsuleData.length) {
-                    capsuleToShow = document.querySelector(`.capsule[data-id="${capsuleData[currentCapsuleIndex].id}"]`);
-                    currentCapsuleIndex++;
+                if (isFirstCapsule) {
+                    // First click always shows the projects capsule
+                    capsuleToShow = document.querySelector(`.capsule[data-id="projects"]`);
+                    isFirstCapsule = false;
                 } else {
-                    // All capsules shown, pick a random one
-                    const randomIndex = Math.floor(Math.random() * capsuleData.length);
-                    capsuleToShow = document.querySelector(`.capsule[data-id="${capsuleData[randomIndex].id}"]`);
+                    // For subsequent clicks, choose random from remaining
+                    if (remainingCapsules.length > 0) {
+                        const randomIndex = Math.floor(Math.random() * remainingCapsules.length);
+                        const capsuleData = remainingCapsules.splice(randomIndex, 1)[0];
+                        capsuleToShow = document.querySelector(`.capsule[data-id="${capsuleData.id}"]`);
+                    } else {
+                        // If all capsules shown, pick random from all except projects
+                        const otherCapsules = capsuleData.filter(c => c.id !== 'projects');
+                        const randomIndex = Math.floor(Math.random() * otherCapsules.length);
+                        capsuleToShow = document.querySelector(`.capsule[data-id="${otherCapsules[randomIndex].id}"]`);
+                    }
                 }
                 
                 // Make the capsule visible and animate it

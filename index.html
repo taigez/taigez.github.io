@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Gacha Profile</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
+        
         :root {
             --primary: #ff5a5f;
             --secondary: #3fb8af;
@@ -20,7 +22,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background-color: var(--light);
             color: var(--dark);
             display: flex;
@@ -29,17 +31,34 @@
             min-height: 100vh;
             padding: 2rem;
             overflow-x: hidden;
+            line-height: 1.6;
+            font-weight: 400;
+            letter-spacing: 0.01em;
         }
 
         header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
             color: var(--primary);
+            letter-spacing: -0.02em;
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.05);
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 1.2rem;
         }
 
         p {
@@ -47,6 +66,8 @@
             color: var(--dark);
             max-width: 600px;
             margin: 0 auto;
+            line-height: 1.8;
+            font-weight: 300;
         }
 
         .machine-container {
@@ -215,7 +236,7 @@
             width: 100%;
             height: 60px;
             border-radius: 60px 60px 0 0;
-            background: rgba(240, 230, 140, 0.7); /* Translucent khaki for top half */
+            background: rgba(255, 255, 255, 0.7); /* Translucent white for top half */
             top: 0;
             left: 0;
             backface-visibility: hidden;
@@ -276,8 +297,12 @@
             left: 0;
             width: 100%;
             text-align: center;
-            font-weight: bold;
+            font-weight: 600;
             color: var(--dark);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
         }
 
         .capsule-inner {
@@ -364,46 +389,82 @@
         }
 
         .modal-title {
-            font-size: 24px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 600;
             color: var(--primary);
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             text-align: center;
+            letter-spacing: -0.01em;
+            position: relative;
+            padding-bottom: 12px;
+        }
+        
+        .modal-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--secondary);
+            border-radius: 3px;
         }
 
         .modal-body {
-            margin-bottom: 20px;
+            margin-bottom: 28px;
+            line-height: 1.8;
+        }
+        
+        .modal-body p {
+            margin-bottom: 16px;
+            font-size: 1.05rem;
         }
 
         .link-btn {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 12px 24px;
             background: var(--secondary);
             color: white;
             text-decoration: none;
             border-radius: 30px;
-            margin: 5px;
-            transition: background 0.3s, transform 0.3s;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            margin: 6px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            font-size: 0.85rem;
         }
 
         .link-btn:hover {
             background: var(--primary);
             transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
 
         .skills-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 20px;
         }
 
         .skill-tag {
             background: var(--secondary);
             color: white;
-            padding: 5px 15px;
+            padding: 8px 18px;
             border-radius: 30px;
-            font-size: 14px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .skill-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
         }
 
         /* Enhanced project card for displaying images and GIFs */
@@ -416,16 +477,20 @@
         }
 
         .project-card h3 {
+            font-family: 'Montserrat', sans-serif;
             color: var(--primary);
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
         }
 
         .project-media {
             width: 100%;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border-radius: 8px;
             overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .project-media img, 
@@ -438,8 +503,10 @@
         }
 
         .project-description {
-            margin-bottom: 15px;
-            line-height: 1.6;
+            margin-bottom: 18px;
+            line-height: 1.7;
+            font-size: 1.05rem;
+            color: rgba(46, 40, 42, 0.9);
         }
 
         /* Balls inside the machine's dome */
@@ -522,7 +589,7 @@
 <body>
     <header>
         <h1>Hello, I'm Taige</h1>
-        <p>Graduate Student CMU | Game Developer | Software Engineer</p>
+        <p class="subtitle" style="font-size: 0.85rem;">CMU Graduate Student | Game Developer | Software Engineer</p>
         <p>Turn the knob to get a capsule and discover more about me!</p>
     </header>
 
